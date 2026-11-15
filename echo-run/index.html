@@ -97,21 +97,33 @@ body {
   // Echo Run ako Discord Activity: spusti sa len vnutri Discordu (*.discordsays.com)
   if (!/\.discordsays\.com$/.test(location.hostname)) return;
   window.__inDiscord = true;
-  var s = document.createElement('script');
-  s.src = 'discord_sdk.js';
-  s.onload = function(){
-    try {
-      window.patchUrlMappings([
-        {prefix: '/gas', target: 'script.google.com'},
-        {prefix: '/gasu', target: 'script.googleusercontent.com'}
-      ]);
-      var sdk = new window.DiscordSDK('1571505542361382982');
-      window.__discordSdk = sdk;
-      sdk.ready().then(function(){ console.log('[EchoRun] Discord SDK ready'); })
-        .catch(function(e){ console.error('[EchoRun] SDK', e); });
-    } catch(e) { console.error('[EchoRun] SDK init', e); }
+  window.__dcCode = ''; window.__dcErr = '';
+  var CID = '1571505542361382982';
+  var ready = new Promise(function(res, rej){
+    var s = document.createElement('script');
+    s.src = 'discord_sdk.js';
+    s.onload = function(){
+      try {
+        window.patchUrlMappings([
+          {prefix: '/gas', target: 'script.google.com'},
+          {prefix: '/gasu', target: 'script.googleusercontent.com'}
+        ]);
+        var sdk = new window.DiscordSDK(CID);
+        window.__discordSdk = sdk;
+        sdk.ready().then(function(){ res(sdk); }).catch(rej);
+      } catch(e) { rej(e); }
+    };
+    s.onerror = rej;
+    document.head.appendChild(s);
+  });
+  // Godot zavola __dcLogin(); vysledok si prevezme z __dcCode / __dcErr
+  window.__dcLogin = function(){
+    window.__dcCode = ''; window.__dcErr = '';
+    ready.then(function(sdk){
+      return sdk.commands.authorize({client_id: CID, response_type: 'code', state: '', prompt: 'none', scope: ['identify']});
+    }).then(function(r){ window.__dcCode = (r && r.code) || ''; if (!window.__dcCode) window.__dcErr = 'nocode'; })
+      .catch(function(e){ window.__dcErr = String((e && e.message) || e || 'err'); console.error('[EchoRun] Discord login', e); });
   };
-  document.head.appendChild(s);
 })();
 </script>
 
@@ -133,7 +145,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":1539524,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":1541604,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
