@@ -104,6 +104,10 @@ var auth_upper := false
 var send_queue: Array = []
 var http_auth: HTTPRequest
 var board_url := ""
+var in_discord := false
+var dc_wait := 0.0
+var dc_poll := 0.0
+var dc_auto := false
 var board: Array = []
 var board_state := 0             # 0 nic, 1 nacitava sa, 2 hotovo, 3 chyba
 var scores_tab := 0              # 0 svet, 1 moje
@@ -238,8 +242,11 @@ func _ready() -> void:
 	http_auth.request_completed.connect(_on_auth)
 	if OS.has_feature("web"):
 		# Discord Activity: siet ide len cez Discord proxy (/.proxy/gas -> script.google.com)
-		if bool(JavaScriptBridge.eval("!!window.__inDiscord", true)) and board_url.begins_with("https://script.google.com"):
+		in_discord = bool(JavaScriptBridge.eval("!!window.__inDiscord", true))
+		if in_discord and board_url.begins_with("https://script.google.com"):
 			board_url = str(JavaScriptBridge.eval("location.origin", true)) + "/.proxy/gas" + board_url.substr("https://script.google.com".length())
+		if in_discord and not _logged_in() and not bool(sv.get("dc_skip", false)):
+			_dc_login(true)
 		autoplay = autoplay or bool(JavaScriptBridge.eval("location.search.indexOf('autoplay') >= 0", true))
 		if OS.is_debug_build() and bool(JavaScriptBridge.eval("location.search.indexOf('coins') >= 0", true)):
 			sv.coins = 5000
@@ -1055,6 +1062,9 @@ func _click(id: String) -> void:
 			_auth_backspace()
 		"alogin":
 			_auth_send("login")
+		"adc":
+			sv.dc_skip = false
+			_dc_login(false)
 		"areg":
 			_auth_send("register")
 		"acancel":
@@ -1280,7 +1290,7 @@ func _defaults() -> Dictionary:
 		"daily_date": "", "daily_best": 0, "streak": 0, "best_streak": 0, "history": {},
 		"missions": [], "tiers": {}, "tut": false,
 		"cores": 0, "skills": [], "cleared": 0, "camp_wins": 0, "camp_runs": 0,
-		"acc_name": "", "acc_token": "", "scores": [], "best_camp": 0, "day_best": {},
+		"acc_name": "", "acc_token": "", "dc_skip": false, "scores": [], "best_camp": 0, "day_best": {},
 		"st": {"games": 0, "rounds": 0, "best_round": 0, "orbs": 0, "near": 0, "combo": 0, "best_any": 0},
 	}
 
@@ -1578,6 +1588,8 @@ func _process(delta: float) -> void:
 	reset_armed = maxf(0.0, reset_armed - delta)
 	dlg_t = maxf(0.0, dlg_t - delta)
 	base_talk_t = maxf(0.0, base_talk_t - delta)
+	if dc_wait > 0.0:
+		_dc_poll(delta)
 	score_shown = lerpf(score_shown, float(score), minf(1.0, delta * 12.0))
 	for p in popups:
 		p[2] -= delta * 1.1
@@ -3644,10 +3656,15 @@ func _on_auth(result: int, code: int, _headers: PackedStringArray, body: PackedB
 	else:
 		var err := str(data.get("err", ""))
 		auth_msg = L("err_" + err) if D.TXT.has("err_" + err) else L("err_net")
+		if dc_auto:
+			_toast(auth_msg)
 		_play("error")
+	dc_auto = false
 
 
 func _logout() -> void:
+	if in_discord:
+		sv.dc_skip = true  # po odhlaseni sa uz automaticky neprihlasi cez Discord
 	sv.acc_name = ""
 	sv.acc_token = ""
 	_save()
@@ -3705,7 +3722,11 @@ func _draw_auth() -> void:
 	_btn("adel", Rect2(502, by, 170, 70), L("del"), COL_DIM, "", 22)
 	_btn("alogin", Rect2(48, by + 86, 304, 84), L("login"), _acc(), "", 30, true)
 	_btn("areg", Rect2(368, by + 86, 304, 84), L("register"), COL_ORB, "", 28)
-	_btn("acancel", Rect2(210, by + 184, 300, 60), L("back"), COL_DIM, "", 22)
+	if in_discord:
+		_btn("adc", Rect2(48, by + 184, 304, 60), L("dc_login"), Color("#8c9eff"), "", 22, true)
+		_btn("acancel", Rect2(368, by + 184, 304, 60), L("back"), COL_DIM, "", 22)
+	else:
+		_btn("acancel", Rect2(210, by + 184, 300, 60), L("back"), COL_DIM, "", 22)
 
 
 func _auth_type_raw(ch: String) -> void:
@@ -3935,3 +3956,39 @@ func _draw_merchant() -> void:
 			_txt(Vector2(br.get_center().x - 12, br.get_center().y + 10), ps, 26, COL_COIN if can else COL_DIM)
 			_coin(Vector2(br.get_center().x + w / 2.0 + 6, br.get_center().y), 9.0, 1.0 if can else 0.5)
 	_btn("mcont", Rect2(70, 1010, 380, 96), L("continue"), _acc(), "", 36, true)
+
+
+# ------------------------------------------------------------------ Discord prihlasenie
+# V Discord Activity si hra vypyta od Discordu jednorazovy kod (okno "Authorize" v Discorde),
+# server ho vymeni za meno hraca a vrati token uctu. Heslo sa nikde nezadava.
+func _dc_login(auto: bool) -> void:
+	if not in_discord or board_url == "" or auth_busy:
+		return
+	dc_auto = auto
+	auth_msg = L("loading")
+	JavaScriptBridge.eval("window.__dcLogin && window.__dcLogin()", true)
+	dc_wait = 90.0
+	dc_poll = 0.0
+
+
+func _dc_poll(delta: float) -> void:
+	dc_wait -= delta
+	dc_poll -= delta
+	if dc_poll > 0.0:
+		return
+	dc_poll = 0.25
+	var code := str(JavaScriptBridge.eval("window.__dcCode || ''", true))
+	var err := str(JavaScriptBridge.eval("window.__dcErr || ''", true))
+	if code != "":
+		dc_wait = 0.0
+		JavaScriptBridge.eval("window.__dcCode = ''", true)
+		auth_busy = true
+		http_auth.cancel_request()
+		http_auth.request(board_url, ["Content-Type: text/plain"], HTTPClient.METHOD_POST,
+			JSON.stringify({"a": "discord", "c": code}))
+	elif err != "" or dc_wait <= 0.0:
+		dc_wait = 0.0
+		auth_msg = L("err_discord")
+		if not dc_auto:
+			_play("error")
+		dc_auto = false
