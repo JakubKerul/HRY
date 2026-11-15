@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Echo Run"
 config/description="Survive the round. Your past is chasing you."
-config/version="2.7.2"
+config/version="2.7.3"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.039, 0.051, 0.11, 1)

@@ -150,3 +150,6 @@ VERZIA 2.6
 == 2.7.2 ==
 111. iPhone: dotyky konecne funguju (Safari cisluje prsty inak ako Android)
 112. Diagnostika vstupu: pridaj ?dbg do adresy hry
+
+== 2.7.3 ==
+113. Zablesk (Blink): nezranitelnost po energii 0,05 s namiesto 0,5 s (za kazdu uroven)

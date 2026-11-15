@@ -30,7 +30,7 @@ const UPG := [
 	{"id": "thin", "max": 3, "r": 1, "n": ["TENKÉ OZVENY", "THIN ECHOES"],
 		"d": ["Všetky ozveny sú o 12 % menšie.", "All echoes are 12% smaller."]},
 	{"id": "blink", "max": 2, "r": 1, "n": ["ZÁBLESK", "BLINK"],
-		"d": ["Po zobratí energie si 0,5 s nezraniteľný.", "0.5 s of invulnerability after taking energy."]},
+		"d": ["Po zobratí energie si 0,05 s nezraniteľný.", "0.05 s of invulnerability after taking energy."]},
 	{"id": "shock", "max": 2, "r": 1, "n": ["ŠOK", "SHOCK"],
 		"d": ["Tretia energia v kole vypne najbližšiu ozvenu.", "The third energy in a round disables the nearest echo."]},
 	{"id": "slow", "max": 2, "r": 1, "n": ["ŤAŽKÉ OZVENY", "HEAVY ECHOES"],

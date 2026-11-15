@@ -9,7 +9,7 @@ const Ads = preload("res://ads.gd")
 
 enum S { MENU, SHOP, PROFILE, SETTINGS, BASE, TREE, SCORES, INTRO, PLAY, PICK, BOSS, MERCHANT, DYING, REVIVE, OVER }
 
-const VERSION := "2.7.2"
+const VERSION := "2.7.3"
 const VIEW := Vector2(720, 1280)
 const ARENA := Rect2(30, 200, 660, 1000)
 const ROUND_TIME := 8.0
@@ -771,7 +771,7 @@ func _take_orb() -> void:
 	_play("orb3" if orbs_got == ORBS_NEEDED else "orb", 1.0 + 0.07 * mini(combo - 1, 10))
 	_vibrate(12)
 	if _up("blink") > 0:
-		invuln_t = 0.5 * _up("blink")
+		invuln_t = maxf(invuln_t, 0.05 * _up("blink"))
 	if orbs_got == ORBS_NEEDED and _up("shock") > 0:
 		for n in _up("shock"):
 			var bi := -1
@@ -2940,7 +2940,7 @@ func _boss_take_orb() -> void:
 	_play("orb", 1.0 + 0.07 * mini(combo - 1, 10))
 	_vibrate(15)
 	if _up("blink") > 0:
-		invuln_t = maxf(invuln_t, 0.5 * _up("blink"))
+		invuln_t = maxf(invuln_t, 0.05 * _up("blink"))
 	b_hp -= 1 + int(_sk("gun"))
 	b_hit = 0.25
 	shake = maxf(shake, 8.0)
