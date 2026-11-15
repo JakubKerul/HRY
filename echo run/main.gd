@@ -105,6 +105,9 @@ var send_queue: Array = []
 var http_auth: HTTPRequest
 var board_url := ""
 var in_discord := false
+var dbg_ov := false
+var dbg_n := [0, 0, 0, 0]  # snimky, dotyky, kliky mysou, pohyby
+var dbg_last := Vector2(-1, -1)
 var dc_wait := 0.0
 var dc_poll := 0.0
 var dc_auto := false
@@ -247,6 +250,7 @@ func _ready() -> void:
 			board_url = str(JavaScriptBridge.eval("location.origin", true)) + "/.proxy/gas" + board_url.substr("https://script.google.com".length())
 		if in_discord and not _logged_in() and not bool(sv.get("dc_skip", false)):
 			_dc_login(true)
+		dbg_ov = bool(JavaScriptBridge.eval("location.search.indexOf('dbg') >= 0", true))
 		autoplay = autoplay or bool(JavaScriptBridge.eval("location.search.indexOf('autoplay') >= 0", true))
 		if OS.is_debug_build() and bool(JavaScriptBridge.eval("location.search.indexOf('coins') >= 0", true)):
 			sv.coins = 5000
@@ -946,6 +950,15 @@ func _log(msg: String) -> void:
 # ================================================================ VSTUP
 
 func _input(event: InputEvent) -> void:
+	if dbg_ov:
+		if event is InputEventScreenTouch and event.pressed:
+			dbg_n[1] += 1
+			dbg_last = event.position - origin
+		elif event is InputEventMouseButton and event.pressed:
+			dbg_n[2] += 1
+			dbg_last = event.position - origin
+		elif event is InputEventScreenDrag or event is InputEventMouseMotion:
+			dbg_n[3] += 1
 	if event is InputEventScreenDrag:
 		if (screen == S.PLAY or screen == S.BOSS) and not paused:
 			player = _clamp_arena(player + event.relative * float(SENS[int(sv.sens)]))
@@ -1673,6 +1686,14 @@ func _draw() -> void:
 		draw_rect(Rect2(Vector2.ZERO, vp), Color(flash_col, flash * 0.3))
 	if fade > 0.0:
 		draw_rect(Rect2(Vector2.ZERO, vp), Color(TH.bg0, fade))
+	if dbg_ov:
+		# diagnostika vstupu (?dbg v adrese): snimky, dotyky, kliky, pohyby, posledny dotyk
+		dbg_n[0] += 1
+		var t := "f%d t%d m%d mv%d  last %d,%d  vp %dx%d  scr %d  btn %d" % [dbg_n[0], dbg_n[1], dbg_n[2], dbg_n[3], int(dbg_last.x), int(dbg_last.y), int(vp.x), int(vp.y), screen, buttons.size()]
+		draw_rect(Rect2(0, 0, vp.x, 34), Color(0, 0, 0, 0.8))
+		draw_string(font_m if font_m else ThemeDB.fallback_font, Vector2(8, 24), t, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.YELLOW)
+		if dbg_last.x >= 0:
+			draw_circle(dbg_last + origin, 14.0, Color(1, 1, 0, 0.6))
 
 
 func _draw_background() -> void:
