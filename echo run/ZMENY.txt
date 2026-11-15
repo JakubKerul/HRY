@@ -142,3 +142,7 @@ VERZIA 2.6
 == 2.7 ==
 107. Discord: v Discorde sa hrac prihlasi automaticky svojim Discord uctom (bez hesla)
 108. Po odhlaseni v Profile sa da prihlasit inym uctom; tlacidlo CEZ DISCORD vrati Discord ucet
+
+== 2.7.1 ==
+109. Rebricek World: tvoje miesto je vzdy pripnute hore (#poradie, meno, skore), aj ked nie si v top 50
+110. Ked si nizsie v rebricku, zoznam ukaze top a potom tvoj riadok

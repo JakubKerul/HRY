@@ -335,6 +335,8 @@ const TXT := {
 	"err_net": ["Bez spojenia so serverom. Skús znova.", "Can't reach the server. Try again."],
 	"err_busy": ["Server je zaneprázdnený, skús o chvíľu.", "Server busy, try again in a moment."],
 	"dc_login": ["CEZ DISCORD", "WITH DISCORD"],
+	"you_rank": ["TY", "YOU"],
+	"not_ranked": ["V tomto rebríčku ešte nie si.", "Not in this ranking yet."],
 	"err_discord": ["Prihlásenie cez Discord nevyšlo.", "Discord login failed."],
 	"err_nodc": ["Discord prihlásenie ešte nie je zapnuté na serveri.", "Discord login is not enabled on the server yet."],
 	"mine": ["MOJE", "MINE"],

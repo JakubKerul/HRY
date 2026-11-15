@@ -53,7 +53,8 @@ function day_(v, tz) {
 }
 
 // ------------------------------------------------------------------ citanie rebricka
-// GET ?top=50&m=2&d=2026-11-15   (m: "2" kampan, "01" endless; d prazdne = celkovo)
+// GET ?top=50&m=2&d=2026-11-15&me=meno   (m: "2" kampan, "01" endless; d prazdne = celkovo)
+// kazdy riadok ma k = poradie; s me= sa prida aj riadok hraca, ked nie je v top N
 function doGet(e) {
   const q = e.parameter || {};
   const camp = String(q.m || '2') === '2';
@@ -81,7 +82,16 @@ function doGet(e) {
     rows = Object.keys(best).map(k => best[k]);
   }
   rows.sort((a, b) => b.s - a.s);
-  return out_(rows.slice(0, n));
+  rows.forEach((x, i) => { x.k = i + 1; });  // poradie
+  const top = rows.slice(0, n);
+  // ?me=meno : ked hrac nie je v top N, prida sa na koniec jeho riadok s poradim (me:1)
+  const me = String(q.me || '');
+  if (me) {
+    const mk = key_(me);
+    const j = rows.findIndex(x => key_(x.n) === mk);
+    if (j >= n) top.push(Object.assign({ me: 1 }, rows[j]));
+  }
+  return out_(top);
 }
 
 // ------------------------------------------------------------------ zapis

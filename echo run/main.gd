@@ -9,7 +9,7 @@ const Ads = preload("res://ads.gd")
 
 enum S { MENU, SHOP, PROFILE, SETTINGS, BASE, TREE, SCORES, INTRO, PLAY, PICK, BOSS, MERCHANT, DYING, REVIVE, OVER }
 
-const VERSION := "2.7"
+const VERSION := "2.7.1"
 const VIEW := Vector2(720, 1280)
 const ARENA := Rect2(30, 200, 660, 1000)
 const ROUND_TIME := 8.0
@@ -3517,6 +3517,9 @@ func _board_fetch() -> void:
 	board_state = 1
 	http_get.cancel_request()
 	var url := "%s?top=50&m=%s&d=%s" % [board_url, "2" if rate_mode == 0 else "01", _today() if rate_day == 1 else ""]
+	if _logged_in():
+		# server prida aj tvoj riadok s poradim, ked nie si v top 50
+		url += "&me=" + str(sv.acc_name).uri_encode()
 	if http_get.request(url) != OK:
 		board_state = 3
 
@@ -3790,20 +3793,53 @@ func _draw_scores() -> void:
 	var modes := [L("endless"), L("daily").split(" ")[0], L("campaign")]
 	var mcols := [COL_TEXT, COL_ORB, _acc()]
 	var me := _player_name()
-	var rows := int((1230.0 - top) / 78.0)
+	var world := board_url != "" and scores_tab == 0
+	# tvoje miesto v svetovom rebricku je vzdy pripnute hore
+	var my_i := -1
+	if world and _logged_in():
+		for i in table.size():
+			if table[i] is Dictionary and str(table[i].get("n", "")).to_lower() == me.to_lower():
+				my_i = i
+				break
+		var pr := Rect2(48, top, 624, 74)
+		_panel(pr, Color(_acc(), 0.16), _acc(), 3, 18, Color(_acc(), 0.25), 10)
+		_txt(Vector2(78, top + 30), L("you_rank"), 16, _acc(), -1)
+		if my_i >= 0:
+			var me_e: Dictionary = table[my_i]
+			var rk := int(me_e.get("k", my_i + 1))
+			_txt(Vector2(78, top + 62), "#%d" % rk, 32, COL_ORB if rk <= 3 else COL_TEXT, -1)
+			_txt(Vector2(200, top + 47), me.left(12), 27, COL_TEXT, -1)
+			_txt(Vector2(648, top + 49), str(int(me_e.get("s", 0))), 36, _acc(), 1)
+		else:
+			_txt(Vector2(200, top + 47), L("not_ranked"), 20, COL_DIM, -1, false)
+		top += 90.0
+	var rows := int((1222.0 - top) / 78.0)
+	# ktore riadky ukazat: zaciatok rebricka; ked si nizsie, posledne miesto patri tebe
+	var show: Array = []
 	for i in mini(table.size(), rows):
+		show.append(i)
+	if my_i >= rows and rows >= 3:
+		show.resize(rows - 2)
+		show.append(-1)
+		show.append(my_i)
+	for j in show.size():
+		var i: int = show[j]
+		var y := top + j * 78.0
+		if i < 0:
+			_txt(Vector2(360, y + 44), "· · ·", 28, COL_DIM, 0, false)
+			continue
 		if not (table[i] is Dictionary):
 			continue
 		var e2: Dictionary = table[i]
-		var y := top + i * 78.0
-		var mine := str(e2.get("n", "")) == me
-		_panel(Rect2(48, y, 624, 68), Color(fill, 0.9 if i % 2 == 0 else 0.6), Color(_acc(), 0.9) if mine else Color(line, 0.9 if i < 3 else 0.3), 2, 16)
-		_txt(Vector2(86, y + 45), str(i + 1), 28, COL_ORB if i < 3 else COL_DIM)
+		var rk2 := int(e2.get("k", i + 1)) if world else i + 1
+		var mine := str(e2.get("n", "")).to_lower() == me.to_lower()
+		_panel(Rect2(48, y, 624, 68), Color(_acc(), 0.14) if mine else Color(fill, 0.9 if j % 2 == 0 else 0.6), Color(_acc(), 0.9) if mine else Color(line, 0.9 if rk2 <= 3 else 0.3), 3 if mine else 2, 16)
+		_txt(Vector2(86, y + 45), str(rk2), 28 if rk2 < 100 else 22, COL_ORB if rk2 <= 3 else COL_DIM)
 		_txt(Vector2(126, y + 33), str(e2.get("n", "?")).left(12), 25, COL_TEXT, -1)
 		var mi := clampi(int(e2.get("m", 0)), 0, 2)
 		var mc: Color = mcols[mi]
 		_txt(Vector2(126, y + 57), "%s · %s · %s" % [str(modes[mi]), L("round_s") % int(e2.get("r", 0)), str(e2.get("d", "")).left(10)], 16, Color(mc, 0.8), -1, false)
-		_txt(Vector2(648, y + 47), str(int(e2.get("s", 0))), 34, _acc() if i < 3 else COL_TEXT, 1)
+		_txt(Vector2(648, y + 47), str(int(e2.get("s", 0))), 34, _acc() if rk2 <= 3 else COL_TEXT, 1)
 
 
 func _draw_base() -> void:
