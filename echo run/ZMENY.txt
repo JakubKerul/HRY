@@ -134,3 +134,7 @@ VERZIA 2.6
 102. V rebricku je kazdy hrac iba raz; lepsie skore ho posunie, horsie nic nezmeni
 103. Po prihlaseni sa najlepsie skore z tohto zariadenia nahra pod ucet
 104. Discord: sprava do #echorun pri novom rekorde a ked niekto niekoho predbehne
+
+== 2.6.1 ==
+105. Discord Activity: hra sa da spustit priamo v Discorde (Apps -> Echo Run), rebricek funguje cez Discord proxy
+106. Web verzia aj na https://jakubkerul.github.io/HRY/echo-run/

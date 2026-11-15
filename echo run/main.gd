@@ -9,7 +9,7 @@ const Ads = preload("res://ads.gd")
 
 enum S { MENU, SHOP, PROFILE, SETTINGS, BASE, TREE, SCORES, INTRO, PLAY, PICK, BOSS, MERCHANT, DYING, REVIVE, OVER }
 
-const VERSION := "2.6"
+const VERSION := "2.6.1"
 const VIEW := Vector2(720, 1280)
 const ARENA := Rect2(30, 200, 660, 1000)
 const ROUND_TIME := 8.0
@@ -223,17 +223,23 @@ func _ready() -> void:
 	board_url = D.BOARD_URL
 	http_get = HTTPRequest.new()
 	http_get.timeout = 12.0
+	http_get.accept_gzip = false  # prehliadac uz rozbali sam (Discord proxy posiela gzip)
 	add_child(http_get)
 	http_get.request_completed.connect(_on_board)
 	http_post = HTTPRequest.new()
 	http_post.timeout = 12.0
+	http_post.accept_gzip = false  # prehliadac uz rozbali sam (Discord proxy posiela gzip)
 	add_child(http_post)
 	http_post.request_completed.connect(_on_board_sent)
 	http_auth = HTTPRequest.new()
 	http_auth.timeout = 15.0
+	http_auth.accept_gzip = false  # prehliadac uz rozbali sam (Discord proxy posiela gzip)
 	add_child(http_auth)
 	http_auth.request_completed.connect(_on_auth)
 	if OS.has_feature("web"):
+		# Discord Activity: siet ide len cez Discord proxy (/.proxy/gas -> script.google.com)
+		if bool(JavaScriptBridge.eval("!!window.__inDiscord", true)) and board_url.begins_with("https://script.google.com"):
+			board_url = str(JavaScriptBridge.eval("location.origin", true)) + "/.proxy/gas" + board_url.substr("https://script.google.com".length())
 		autoplay = autoplay or bool(JavaScriptBridge.eval("location.search.indexOf('autoplay') >= 0", true))
 		if OS.is_debug_build() and bool(JavaScriptBridge.eval("location.search.indexOf('coins') >= 0", true)):
 			sv.coins = 5000
