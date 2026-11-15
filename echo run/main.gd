@@ -9,7 +9,7 @@ const Ads = preload("res://ads.gd")
 
 enum S { MENU, SHOP, PROFILE, SETTINGS, BASE, TREE, SCORES, INTRO, PLAY, PICK, BOSS, MERCHANT, DYING, REVIVE, OVER }
 
-const VERSION := "2.7.1"
+const VERSION := "2.7.2"
 const VIEW := Vector2(720, 1280)
 const ARENA := Rect2(30, 200, 660, 1000)
 const ROUND_TIME := 8.0
@@ -106,6 +106,7 @@ var http_auth: HTTPRequest
 var board_url := ""
 var in_discord := false
 var dbg_ov := false
+var last_touch_t := -1.0
 var dbg_n := [0, 0, 0, 0]  # snimky, dotyky, kliky mysou, pohyby
 var dbg_last := Vector2(-1, -1)
 var dc_wait := 0.0
@@ -962,8 +963,12 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
 		if (screen == S.PLAY or screen == S.BOSS) and not paused:
 			player = _clamp_arena(player + event.relative * float(SENS[int(sv.sens)]))
-	elif event is InputEventScreenTouch and event.pressed and event.index == 0:
-		_on_tap(event.position - origin)
+	elif event is InputEventScreenTouch:
+		# iPhone (Safari) cisluje dotyky nahodnymi velkymi cislami, nie od 0 ako Android,
+		# preto berieme kazde nove dotknutie; druhy prst v tej istej chvili sa ignoruje
+		if event.pressed and now - last_touch_t > 0.08:
+			last_touch_t = now
+			_on_tap(event.position - origin)
 	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_on_tap(event.position - origin)
 	elif event is InputEventMouseMotion:
