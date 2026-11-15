@@ -9,7 +9,7 @@ const Ads = preload("res://ads.gd")
 
 enum S { MENU, SHOP, PROFILE, SETTINGS, BASE, TREE, SCORES, INTRO, PLAY, PICK, BOSS, MERCHANT, DYING, REVIVE, OVER }
 
-const VERSION := "2.6.1"
+const VERSION := "2.7"
 const VIEW := Vector2(720, 1280)
 const ARENA := Rect2(30, 200, 660, 1000)
 const ROUND_TIME := 8.0

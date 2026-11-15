@@ -138,3 +138,7 @@ VERZIA 2.6
 == 2.6.1 ==
 105. Discord Activity: hra sa da spustit priamo v Discorde (Apps -> Echo Run), rebricek funguje cez Discord proxy
 106. Web verzia aj na https://jakubkerul.github.io/HRY/echo-run/
+
+== 2.7 ==
+107. Discord: v Discorde sa hrac prihlasi automaticky svojim Discord uctom (bez hesla)
+108. Po odhlaseni v Profile sa da prihlasit inym uctom; tlacidlo CEZ DISCORD vrati Discord ucet
