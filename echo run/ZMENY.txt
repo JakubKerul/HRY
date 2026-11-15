@@ -1,0 +1,136 @@
+OZVENA 1.0 - co pribudlo oproti verzii 0.2
+==========================================
+
+HRATELNOST
+ 1. Vylepsenie po KAZDOM kole (vyber 1 z 3 kariet)
+ 2. 14 vylepseni namiesto 4: Stit, Mensi, Magnet, Bonus, Rozbeh, Rytmus, Zberac,
+    Tenke ozveny, Zablesk, Sok, Tazke ozveny, Prehodenie, Vymazanie, Druhy dych
+ 3. Tri vzacnosti kariet (bezna, vzacna, epicka) s roznou sancou
+ 4. Vylepsenia maju urovne a skladaju sa
+ 5. Prehodenie kariet (1 na hru, dalsie z karty Prehodenie)
+ 6. Kombo: rychlo po sebe zobrata energia nasobi body (az x3)
+ 7. Magnet energiu naozaj pritahuje
+ 8. Specialne kolo kazde 5. kolo: Zrkadlo (ozveny su zrkadlovo otocene)
+ 9. Specialne kolo: Tma (vidis len ozveny blizko seba)
+10. Specialne kolo: Zrychlenie (ozveny o 25 % rychlejsie)
+11. Specialne kolo: Zlate kolo (dvojnasobne body)
+12. Milniky: kazde 5. kolo bonus iskier a oslava
+13. Iskry v arene: kratko sa objavia a daju sa chytit
+14. Pokracovanie po smrti (raz za hru, za iskry; tlacidlo za reklamu je pripravene)
+15. Druhy dych: epicka karta, ktora ta raz zachrani
+16. Nahlad drah ozvien pred zaciatkom kola
+17. Bezpecnejsie miesto startu (dalej od ozvien)
+18. Hlasenie noveho rekordu uz pocas hry
+19. Velke odpocitavanie poslednych 3 sekund + tikanie
+20. Cerveny okraj areny, ked ti chyba energia a dochadza cas
+21. Zvyraznenie ozveny, ktora ta zrazila
+22. Kratka nezranitelnost po energii (karta Zablesk)
+23. Ozveny maju farby, ktore sa nepletu s hracom
+
+POSTUP A DOVODY VRATIT SA
+24. Mena "iskry" - ziskavas ju za kola, skore, misie, urovne a seriu
+25. Obchod
+26. 8 postav (tvary a farby)
+27. 5 stop za hracom
+28. 5 farebnych aren
+29. Misie: vzdy 3 aktivne, 10 druhov, po splneni pride tazsia
+30. Urovne hraca a skusenosti
+31. Hodnosti (Novacik ... Legenda)
+32. Odmena iskier za kazdu novu uroven
+33. Denna vyzva: rovnake kola, energia aj karty pre vsetkych v dany den
+34. Denna seria s rastucim bonusom iskier
+35. Upozornenie v menu, ked dnesna vyzva este nie je odohrana
+36. Profil so statistikami (hry, kola, energia, uniky, kombo, seria)
+37. Graf dennej vyzvy za poslednych 7 dni
+38. Zdielanie vysledku (text do schranky / systemove zdielanie na mobile)
+39. Vysledkova obrazovka: statistiky hry, zisk iskier, postup urovne, splnene misie
+40. Ked sa nic nesplnilo, koniec hry ukaze, kolko chyba do misii
+
+GRAFIKA A UI
+41. Novy font (Chakra Petch, volna licencia)
+42. Nove menu s animovanym nazvom a ozvenami v pozadi
+43. Zaoblene panely, ziariace tlacidla, reakcia na stlacenie
+44. Animovane pozadie: prechod farieb, pohybliva mriezka, prach
+45. Ziara okolo hraca, ozvien a energie; rotujuca energia
+46. Animovane karty a prechody medzi obrazovkami
+47. Pocitadlo skore, ktore dobieha, a vyskakujuce cisla s obrysom
+48. Castice a otrasy (silnejsie pri smrti, stite, milniku)
+49. Tlacidlo pauzy a menu pauzy (pokracovat / odznova / menu)
+50. Navod v prvej hre (3 kratke kroky priamo pocas hrania)
+51. Stitky aktivnych vylepseni pod arenou
+52. Stity sa kreslia ako obiehajuce obluky okolo hraca
+53. Prisposobenie sirokym aj vysokym obrazovkam (obsah je vzdy v strede)
+54. Nova ikona
+
+ZVUK
+55. Hudba v dvoch vrstvach - druha (bicie, basa) silnie s cislom kola
+56. 17 zvukov; vyska tonu rastie s kombom
+57. Vibracie na mobile
+
+NASTAVENIA A TECHNIKA
+58. Nastavenia: zvuky, hudba, vibracie, otrasy obrazovky, citlivost ovladania
+59. Slovencina a anglictina s automatickou volbou (anglictina je nutna pre Poki/CrazyGames)
+60. Vymazanie postupu s potvrdenim
+61. ads.gd: pripravene miesta pre reklamy a SDK portalov
+62. data.gd: vsetok obsah a ceny na jednom mieste, da sa ladit bez zasahu do logiky
+63. Ukladanie odolne voci starsim/poskodenym datam
+
+VERZIA 1.1
+64. Hra sa vola Echo Run
+65. Anglictina je predvoleny jazyk; prepinac EN/SK je v menu aj v nastaveniach
+66. Hudobny obchod: 4. zalozka MUSIC
+67. Ukazka skladby pred kupou (20 sekund, tlacidlo prehrat/zastavit)
+68. Tri nove skladby: Neon Drift (1500), Deep Pulse (2500), Pixel Storm (4000)
+69. Miesto pre skladbu od shadyyk za 7500 iskier (caka na zvukovy subor)
+70. Kredity: shadyyk a Prodambien pri skladbe a v nastaveniach
+
+VERZIA 2.0 - KAMPAN
+71. Kampan v style rogue-like: vyprava cez 5 lokalit, povodna hra je v nej minihrou
+72. Zakladna s casovym zariadenim: po zniceni lode sa vratis sem (pribeh generala lode ECHO)
+73. Tri radkyne (jedna farba + obrys, kazda iny uces a ina animacia pri hovoreni):
+    VEX - vycvik a rady, NOVA - obcas pochvali postup, RIOT - hlasi skody na lodi
+74. Trup lode: v kampani zasah neznamena koniec, ale -1 trup
+75. 5 vlastnych bossov: WARDEN, SAWTOOTH, HIVE, STALKER, CHRONOS (energia striela z hlavneho dela)
+76. Kazda lokalita ma vlastne farby a vlastne pravidlo (zrkadlo, tma, zrychlenie, nahodne)
+77. Strom schopnosti: 30 trvalych uzlov v 5 vetvach, kupuju sa za jadra z kampane
+78. Dimenzionalny obchodnik po kazdom bossovi: oprava, vystuz, zahadna karta
+79. 5 novych postav - kazdu predava obchodnik len v jednej lokalite, potom je aj v obchode
+80. Menu: KAMPAN ako hlavny rezim, ENDLESS a DAILY ostavaju
+
+VERZIA 2.1
+81. Nastavenie "PC controls": MOUSE (lod leti za kurzorom, netreba drzat tlacidlo) alebo WASD
+82. Dotyk funguje vzdy automaticky, klavesnica (WASD aj sipky) tiez
+83. Radkyne vyskakuju spoza praveho dolneho rohu ako polovica postavy, titulky su dole
+84. Radkyna sa ozve po kazdom kole a neprekryva vyber kariet
+85. Nove repliky (rady od VEX, pochvaly od NOVA, hlasenie trupu od RIOT)
+
+VERZIA 2.2
+86. Radkyne prekreslene: ludskejsie tvare (oci, obocie, nos, pery, zmurknutie), hladke krivky
+87. Polovica postavy s pasom a bokmi, oblecenie a gesto ruky pre kazdu zvlast
+88. Na vysokych telefonoch je postava vacsia a vidno ju az po boky
+89. Vyber kariet posunuty vyssie, aby ho postava neprekryvala
+
+VERZIA 2.3
+90. Meno hraca: Profile -> NAME (klavesnica na obrazovke, na PC aj fyzicka)
+91. Tabulka skore: kazda dohrana hra sa zapise s menom, rezimom, kolom a datumom (Profile -> SCORE TABLE)
+
+VERZIA 2.4
+92. Spolocna tabulka skore pre vsetkych hracov (zalozka WORLD), zapina sa adresou v data.gd (BOARD_URL)
+93. Navod a hotovy skript pre Google tabulku: TABULKA_SKORE.txt
+
+VERZIA 2.5
+94. RATING v menu: KAMPAN / ENDLESS  x  ALL TIME (celkovo) / TODAY (dnes), zalozky WORLD a MINE
+95. Kazda dohrana hra sa uklada s datumom; hra si pamata rekord kampane a denne maxima (90 dni)
+96. Spolocna tabulka ukazuje najlepsie skore kazdeho hraca (jeden riadok na meno)
+97. Endless a denna vyzva: po kazdom 5. kole nahodny boss (v dennej vyzve rovnaky pre vsetkych)
+98. Rekord kampane je na tlacidle CAMPAIGN v menu
+
+VERZIA 2.5.1
+99. Spolocny rebricek je zapnuty (Google tabulka "Echo Run scores")
+
+VERZIA 2.6
+100. Ucty: registracia a prihlasenie (meno + heslo) v Profile, cudzie meno si nikto neda
+101. Mena s diakritikou, velkymi aj malymi pismenami a medzerou (klavesnica v hre aj fyzicka)
+102. V rebricku je kazdy hrac iba raz; lepsie skore ho posunie, horsie nic nezmeni
+103. Po prihlaseni sa najlepsie skore z tohto zariadenia nahra pod ucet
+104. Discord: sprava do #echorun pri novom rekorde a ked niekto niekoho predbehne

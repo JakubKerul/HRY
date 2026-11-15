@@ -1,0 +1,41 @@
+ECHO RUN 1.1 (povodne Ozvena) - projekt pre Godot 4.7.2
+=======================================================
+
+Spustenie
+  1. Otvor D:\godot\Godot_v4.7.2-stable_win64.exe
+  2. Import -> D:\godot\ozvena\project.godot (ak uz projekt mas otvoreny, Godot si subory nacita sam)
+  3. Stlac F5
+
+Ovladanie na PC
+  Tahaj mysou (ako prstom) alebo sipky.
+  Medzernik = hrat / znova, D = denna vyzva, 1-3 = vyber karty, R = prehodit karty, P/Esc = pauza
+
+Subory
+  main.gd    - cela hra (logika, kreslenie, UI)
+  data.gd    - vylepsenia, specialne kola, obchod, misie, texty SK/EN  <- tu sa ladi obsah a ceny
+  ads.gd     - prazdne "haciky" na reklamy a SDK (Poki / CrazyGames / AdMob)
+  fonts/     - font Chakra Petch (licencia OFL, zadarmo aj na komercne pouzitie, text v OFL.txt)
+  audio/     - hudba: 4 skladby vygenerovane vlastnym skriptom (ziadne licencie)
+               + miesto pre skladbu od shadyyk (subor audio/music_shadyyk.ogg / .mp3 / .wav)
+  ZMENY.txt  - zoznam vsetkeho, co pribudlo
+
+Web export
+  Project -> Export -> Web (Godot si vyziada stiahnutie export sablon, je to zadarmo).
+  Hotovy web build: D:\godot\ozvena_web_build.zip (nahraj na itch.io ako HTML hru).
+  Demo rezim (bot hra sam, hodi sa na klipy): pridaj ?autoplay za adresu.
+  Anglictina natvrdo: ?lang=en
+
+Jazyk
+  Predvolena je anglictina. Prepina sa tlacidlom EN/SK vlavo dole v menu alebo v Settings -> Language.
+
+Hudba v obchode
+  Shop -> MUSIC. Tlacidlom ▶ si skladbu 20 sekund vypocujes pred kupou.
+  Ceny a nazvy su v data.gd (const MUSIC). Hudba je naschval najdrahsia vec v hre.
+  Skladba "Shadyyk Special" sa odomkne (prestane ukazovat SOON), ked bude v priecinku audio/
+  subor music_shadyyk.ogg, .mp3 alebo .wav.
+  Kredity (shadyyk, loop: Prodambien) su pri skladbe v obchode a dole v Settings.
+
+Co este nie je hotove
+  - reklamy nie su napojene (ads.gd je pripraveny, treba ucet a SDK portalu)
+  - pokracovanie po smrti zatial stoji 30 iskier; po napojeni reklam pribudne tlacidlo "za reklamu"
+  - rebricek medzi hracmi by potreboval server

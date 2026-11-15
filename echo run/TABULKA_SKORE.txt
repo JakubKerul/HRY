@@ -1,0 +1,22 @@
+SPOLOCNY REBRICEK - ako funguje
+===============================
+
+Tabulka: "Echo Run scores" (Google Tabulky, ucet nevrlakreset@gmail.com)
+  list "players" - jeden riadok na hraca: ucet (meno, heslo ako hash) + najlepsie skore kampane a endless
+  list "scores"  - kazda dohrana hra (meno, skore, kolo, rezim, datum) - z toho sa pocita rebricek TODAY
+
+Server: Google Apps Script "Echo Run scores", kod je v server/apps_script.js
+  Adresa (je v data.gd ako BOARD_URL):
+  https://script.google.com/macros/s/AKfycbwoTPav5-9Q3qRbA1OXr3JpT8neoOt6kZh7sppIzUYWEfjAd5tbZMoyAhC3lgGV3Ru0hQ/exec
+
+Ucty: hrac sa v hre (Profile -> LOG IN) zaregistruje menom a heslom. Meno je jedinecne
+  (bez ohladu na velke/male pismena), do rebricka zapisuje len prihlaseny hrac.
+  Heslo sa nikde neuklada, na serveri je len jeho hash.
+
+Discord: pri novom osobnom rekorde alebo ked niekto niekoho predbehne pride sprava do kanala
+  #echorun na serveri gesko. Adresa webhooku je vo Vlastnostiach skriptu (DISCORD_WEBHOOK),
+  NIE v kode - repozitar je verejny.
+
+Zmena kodu servera: vlozit do editora Apps Script, ulozit, potom
+  Nasadit -> Spravovat nasadenia -> upravit (ceruzka) -> Verzia: Nova verzia -> Nasadit.
+  Adresa ostane rovnaka.
