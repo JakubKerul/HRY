@@ -3967,7 +3967,7 @@ func _dc_login(auto: bool) -> void:
 	dc_auto = auto
 	auth_msg = L("loading")
 	JavaScriptBridge.eval("window.__dcLogin && window.__dcLogin()", true)
-	dc_wait = 90.0
+	dc_wait = 900.0  # Discord okno moze byt otvorene dlho; zrusenie vrati chybu hned
 	dc_poll = 0.0
 
 
